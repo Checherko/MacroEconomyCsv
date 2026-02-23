@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  macro-analyzer:
+    build: .
+    container_name: macro-economic-analyzer
+    volumes:
+      - ./data:/app/data:ro  # Mount data directory as read-only
+    working_dir: /app
+    command: ["python", "macro_analyzer.py", "--help"]
+    
+  # Service for running analysis with sample data
+  analyze-sample:
+    build: .
+    container_name: macro-analyzer-sample
+    volumes:
+      - ./data:/app/data:ro
+    working_dir: /app
+    command: ["python", "macro_analyzer.py", "--files", "economic1.csv", "economic2.csv", "--report", "average-gdp"]
+    profiles: ["sample"]  # Only run when explicitly requested
